@@ -1,0 +1,706 @@
+﻿<Window x:Class="StopStealer.GUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="hellstorm - Anti-Stealer Protection"
+        Icon="pack://application:,,,/app.ico"
+        Width="1200" Height="760"
+        MinWidth="1024" MinHeight="640"
+        WindowStartupLocation="CenterScreen"
+        Foreground="White"
+        FontFamily="Segoe UI"
+        ResizeMode="CanResizeWithGrip"
+        WindowStyle="None"
+        AllowsTransparency="True">
+
+    <Window.Resources>
+        <!-- ================= GLOW EFFECTS ================= -->
+        <DropShadowEffect x:Key="GlowCyan"    BlurRadius="24" ShadowDepth="0" Color="#00d2ff" Opacity="0.85"/>
+        <DropShadowEffect x:Key="GlowCyanMid" BlurRadius="14" ShadowDepth="0" Color="#00d2ff" Opacity="0.55"/>
+        <DropShadowEffect x:Key="GlowCyanSoft" BlurRadius="8"  ShadowDepth="0" Color="#00d2ff" Opacity="0.35"/>
+        <DropShadowEffect x:Key="GlowRed"     BlurRadius="18" ShadowDepth="0" Color="#ff2d55" Opacity="0.65"/>
+        <DropShadowEffect x:Key="GlowRedMid"  BlurRadius="10" ShadowDepth="0" Color="#ff2d55" Opacity="0.4"/>
+        <DropShadowEffect x:Key="GlowPurple"  BlurRadius="18" ShadowDepth="0" Color="#a855f7" Opacity="0.6"/>
+        <DropShadowEffect x:Key="GlowGold"    BlurRadius="16" ShadowDepth="0" Color="#f0a523" Opacity="0.6"/>
+        <DropShadowEffect x:Key="GlowGreen"   BlurRadius="16" ShadowDepth="0" Color="#00ff88" Opacity="0.6"/>
+        <DropShadowEffect x:Key="GlowWhite"   BlurRadius="10" ShadowDepth="0" Color="#ddeaff" Opacity="0.35"/>
+
+        <!-- ================= GRADIENTS ================= -->
+        <LinearGradientBrush x:Key="BgRoot" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#03060f" Offset="0"/>
+            <GradientStop Color="#070d20" Offset="0.5"/>
+            <GradientStop Color="#0a0a1e" Offset="1"/>
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="SidebarGrad" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#0a1024" Offset="0"/>
+            <GradientStop Color="#060a18" Offset="1"/>
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="BtnStartGrad" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#00ff88" Offset="0"/>
+            <GradientStop Color="#00c06a" Offset="0.55"/>
+            <GradientStop Color="#0084ff" Offset="1"/>
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="BtnStopGrad" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#ff5470" Offset="0"/>
+            <GradientStop Color="#e63946" Offset="0.6"/>
+            <GradientStop Color="#a80038" Offset="1"/>
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="BtnExportGrad" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#c084fc" Offset="0"/>
+            <GradientStop Color="#a855f7" Offset="1"/>
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="PanelGrad" StartPoint="0,1" EndPoint="0,0">
+            <GradientStop Color="#0d1425" Offset="0"/>
+            <GradientStop Color="#111d30" Offset="1"/>
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="AccentGrad" StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="#00d2ff" Offset="0"/>
+            <GradientStop Color="#a855f7" Offset="1"/>
+        </LinearGradientBrush>
+
+        <SolidColorBrush x:Key="PanelBg" Color="#0d1425"/>
+        <SolidColorBrush x:Key="PanelBgHi" Color="#16213e"/>
+        <SolidColorBrush x:Key="AccentCyan" Color="#00d2ff"/>
+        <SolidColorBrush x:Key="AccentRed" Color="#ff2d55"/>
+        <SolidColorBrush x:Key="AccentPurple" Color="#a855f7"/>
+        <SolidColorBrush x:Key="AccentGold" Color="#f0a523"/>
+        <SolidColorBrush x:Key="AccentGreen" Color="#00ff88"/>
+        <SolidColorBrush x:Key="TextLight" Color="#e8f0ff"/>
+        <SolidColorBrush x:Key="TextDim" Color="#7b8db8"/>
+        <SolidColorBrush x:Key="BorderGlow" Color="#1c2c55"/>
+
+        <!-- ================= STYLES ================= -->
+        <Style x:Key="NavButton" TargetType="RadioButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#7b8db8"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#7b8db8"/>
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border x:Name="Bd" Background="Transparent" CornerRadius="10" Margin="10,2">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="#16213e"/>
+                                <Setter Property="Foreground" Value="#00d2ff"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="#101a30"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="TinyActionBtn" TargetType="Button">
+            <Setter Property="Background" Value="#101a30"/>
+            <Setter Property="Foreground" Value="#7b8db8"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Padding" Value="14,6"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd" Background="{TemplateBinding Background}" CornerRadius="8" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="#1c2c55"/>
+                                <Setter Property="Foreground" Value="#00d2ff"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="#0a0f1e"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <!-- Animated background -->
+    <Window.Background>
+        <RadialGradientBrush Center="0.5,0.35" GradientOrigin="0.5,0.35" RadiusX="0.8" RadiusY="0.9">
+            <GradientStop Color="#0b1630" Offset="0"/>
+            <GradientStop Color="#03060f" Offset="0.55"/>
+            <GradientStop Color="#010308" Offset="1"/>
+        </RadialGradientBrush>
+    </Window.Background>
+
+    <Grid ClipToBounds="True">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="212"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+
+        <!-- ambient glow blobs (animated) -->
+        <Ellipse Grid.RowSpan="2" Grid.ColumnSpan="2" Width="520" Height="520" Fill="#00d2ff" Opacity="0.05" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-220,0,0">
+            <Ellipse.Effect>
+                <BlurEffect Radius="140"/>
+            </Ellipse.Effect>
+            <Ellipse.RenderTransform>
+                <TranslateTransform x:Name="BgBlob1Y" Y="0"/>
+            </Ellipse.RenderTransform>
+        </Ellipse>
+        <Ellipse Grid.RowSpan="2" Grid.ColumnSpan="2" Width="380" Height="380" Fill="#a855f7" Opacity="0.05" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,-120,-120">
+            <Ellipse.Effect>
+                <BlurEffect Radius="120"/>
+            </Ellipse.Effect>
+        </Ellipse>
+
+        <!-- ================= SIDEBAR ================= -->
+        <Border Grid.Row="0" Grid.Column="0" Background="{StaticResource SidebarGrad}"
+                BorderBrush="#16233f" BorderThickness="0,0,1,0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Logo / brand -->
+                <StackPanel Grid.Row="0" Margin="18,22,18,18" MouseLeftButtonDown="WindowDrag">
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="&#xE72E;" FontFamily="Segoe MDL2 Assets" FontSize="30"
+                                       Foreground="#00d2ff" VerticalAlignment="Center"
+                                       Effect="{StaticResource GlowCyan}"/>
+                            <TextBlock Text="HELLSTORM" FontSize="19" FontWeight="Black" Foreground="#e8f0ff"
+                                       VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <TextBlock Text="anti-stealer shield" FontSize="11" Foreground="#7b8db8" Margin="0,4,0,0" FontStyle="Italic"/>
+                    <Border Height="1" Background="#16233f" Margin="0,14,0,0"/>
+                </StackPanel>
+
+                <!-- Nav -->
+                <StackPanel Grid.Row="1">
+                    <RadioButton x:Name="NavOverview" Style="{StaticResource NavButton}" Content="OVERVIEW" IsChecked="True" GroupName="nav" Click="Nav_Click" Tag="0"/>
+                    <RadioButton x:Name="NavDiscord" Style="{StaticResource NavButton}" Content="DISCORD SHIELD" GroupName="nav" Click="Nav_Click" Tag="1"/>
+                    <RadioButton x:Name="NavThreats" Style="{StaticResource NavButton}" Content="THREAT LOG" GroupName="nav" Click="Nav_Click" Tag="2"/>
+                    <RadioButton x:Name="NavBrowsers" Style="{StaticResource NavButton}" Content="BROWSERS" GroupName="nav" Click="Nav_Click" Tag="3"/>
+                    <RadioButton x:Name="NavModules" Style="{StaticResource NavButton}" Content="MODULES" GroupName="nav" Click="Nav_Click" Tag="4"/>
+                </StackPanel>
+
+                <!-- Controls -->
+                <StackPanel Grid.Row="2" VerticalAlignment="Top" Margin="10,14,10,0">
+                    <Button x:Name="BtnStart" Content="&#xE768;  START SHIELD" FontFamily="Segoe UI, Segoe MDL2 Assets" FontSize="13"
+                            FontWeight="Bold" Foreground="#06130d" Background="{StaticResource BtnStartGrad}"
+                            BorderThickness="0" Height="46" Cursor="Hand" Click="BtnStart_Click">
+                        <Button.Effect>
+                            <DropShadowEffect BlurRadius="16" ShadowDepth="0" Color="#00ff88" Opacity="0.7"/>
+                        </Button.Effect>
+                    </Button>
+                    <Button x:Name="BtnStop" Content="&#xE711;  STOP SHIELD" FontFamily="Segoe UI, Segoe MDL2 Assets" FontSize="13"
+                            FontWeight="Bold" Foreground="White" Background="{StaticResource BtnStopGrad}"
+                            BorderThickness="0" Height="46" Margin="0,10,0,0" IsEnabled="False" Cursor="Hand"
+                            Click="BtnStop_Click">
+                        <Button.Effect>
+                            <DropShadowEffect BlurRadius="14" ShadowDepth="0" Color="#ff2d55" Opacity="0.6"/>
+                        </Button.Effect>
+                    </Button>
+                    <Button x:Name="BtnExport" Content="&#xE74E;  E X P O R T" FontFamily="Segoe UI, Segoe MDL2 Assets" FontSize="12"
+                            FontWeight="SemiBold" Foreground="White" Background="{StaticResource BtnExportGrad}"
+                            BorderThickness="0" Height="38" Margin="0,10,0,0" Cursor="Hand" Click="BtnExport_Click">
+                        <Button.Effect>
+                            <DropShadowEffect BlurRadius="10" ShadowDepth="0" Color="#a855f7" Opacity="0.5"/>
+                        </Button.Effect>
+                    </Button>
+                    <Button x:Name="BtnAutostart" Content="&#xE7C1;  AUTO-RUN: OFF" FontFamily="Segoe UI, Segoe MDL2 Assets" FontSize="12"
+                            FontWeight="SemiBold" Foreground="#bfffea" Background="#111c33"
+                            BorderThickness="1" BorderBrush="#1e3a55" Height="38" Margin="0,10,0,0" Cursor="Hand"
+                            Click="BtnAutostart_Click">
+                        <Button.Effect>
+                            <DropShadowEffect BlurRadius="8" ShadowDepth="0" Color="#00ff88" Opacity="0.25"/>
+                        </Button.Effect>
+                    </Button>
+                </StackPanel>
+
+                <!-- Sidebar footer -->
+                <StackPanel Grid.Row="3" Margin="16,0,16,16">
+                    <Border Height="1" Background="#16233f" Margin="0,0,0,12"/>
+                    <TextBlock Text="v1.0  //  shield online" FontSize="10" Foreground="#55668f"/>
+                    <TextBlock Text="designed by hellstorm" FontSize="10" Foreground="#55668f" FontStyle="Italic" Margin="0,2,0,0"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- ================= MAIN AREA ================= -->
+        <Grid Grid.Row="0" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Top bar -->
+            <Border Grid.Row="0" Background="Transparent" Padding="22,16,22,14" MouseLeftButtonDown="WindowDrag">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock x:Name="PageTitle" Text="PROTECTION OVERVIEW" FontSize="16" FontWeight="Bold"
+                                   Foreground="#e8f0ff" VerticalAlignment="Center"/>
+                        <Border x:Name="ModuleCountPill" Background="#16213e" CornerRadius="20" Padding="10,3" Margin="14,0,0,0" VerticalAlignment="Center">
+                            <TextBlock x:Name="TxtModuleCount" Text="7 modules" FontSize="10" Foreground="#7b8db8"/>
+                        </Border>
+                    </StackPanel>
+
+                    <!-- Status pill -->
+                    <Border Grid.Column="1" Background="#0d1425" CornerRadius="20" Padding="14,7" Margin="0,0,12,0" VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse x:Name="StatusDot" Width="10" Height="10" Fill="#55668f" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="StatusText" Text="STANDBY" FontSize="11" FontWeight="SemiBold" Foreground="#7b8db8" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Clock + window controls -->
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Border Background="#0d1425" CornerRadius="20" Padding="14,7" Margin="0,0,14,0" VerticalAlignment="Center">
+                            <TextBlock x:Name="ClockText" Text="00:00:00" FontSize="11" Foreground="#7b8db8" FontFamily="Consolas"/>
+                        </Border>
+                        <Button Content="&#xE921;" FontFamily="Segoe MDL2 Assets" Width="34" Height="30"
+                                Background="Transparent" Foreground="#7b8db8" BorderThickness="0" FontSize="10"
+                                Click="BtnMinimize_Click" Cursor="Hand"/>
+                        <Button Content="&#xE8BB;" FontFamily="Segoe MDL2 Assets" Width="34" Height="30"
+                                Background="Transparent" Foreground="#ff2d55" BorderThickness="0" FontSize="10"
+                                Click="BtnClose_Click" Cursor="Hand"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Content -->
+            <TabControl x:Name="MainTabs" Grid.Row="1" Margin="0,0,0,0" Background="Transparent" BorderThickness="0" Padding="0">
+                <TabControl.Resources>
+                    <Style TargetType="TabItem">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                    </Style>
+                </TabControl.Resources>
+
+                <!-- ======= OVERVIEW ======= -->
+                <TabItem>
+                    <Grid Margin="22,4,22,20">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Radar + hero -->
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="300"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Radar shield -->
+                            <StackPanel Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Canvas Width="250" Height="250">
+                                    <Ellipse Canvas.Left="95" Canvas.Top="95" Width="60" Height="60" Fill="#001a2e">
+                                        <Ellipse.Effect>
+                                            <DropShadowEffect BlurRadius="30" ShadowDepth="0" Color="#00d2ff" Opacity="0.9"/>
+                                        </Ellipse.Effect>
+                                    </Ellipse>
+                                    <Ellipse x:Name="Ring1" Canvas.Left="60" Canvas.Top="60" Width="130" Height="130" Stroke="#00d2ff" StrokeThickness="1.5" Opacity="0.5"/>
+                                    <Ellipse x:Name="Ring2" Canvas.Left="25" Canvas.Top="25" Width="200" Height="200" Stroke="#00d2ff" StrokeThickness="1" Opacity="0.3"/>
+                                    <Ellipse x:Name="Ring3" Canvas.Left="-8" Canvas.Top="-8" Width="265" Height="265" Stroke="#00d2ff" StrokeThickness="0.75" Opacity="0.15"/>
+                                    <TextBlock Canvas.Left="104" Canvas.Top="98" Text="&#xE72E;" FontFamily="Segoe MDL2 Assets"
+                                               FontSize="44" Foreground="#00d2ff" TextAlignment="Center" Width="42" Height="48"
+                                               Effect="{StaticResource GlowCyan}"/>
+                                </Canvas>
+                                <TextBlock x:Name="HeroStatus" Text="SHIELD DISENGAGED" FontSize="14" FontWeight="Bold"
+                                           Foreground="#55668f" HorizontalAlignment="Center" Margin="0,8,0,0"/>
+                                <TextBlock Text="real-time process &amp; data protection" FontSize="10" Foreground="#55668f"
+                                           HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                            </StackPanel>
+
+                            <!-- Hero stats -->
+                            <Grid Grid.Column="1" Margin="20,0,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <!-- Threats blocked -->
+                                <Border Grid.Row="0" Grid.Column="0" Margin="0,0,10,10" Background="{StaticResource PanelGrad}"
+                                        CornerRadius="14" BorderBrush="#ff2d55" BorderThickness="1" Padding="18,14">
+                                    <Border.Effect><DropShadowEffect BlurRadius="10" ShadowDepth="0" Color="#ff2d55" Opacity="0.25"/></Border.Effect>
+                                    <StackPanel>
+                                        <TextBlock Text="THREATS INTERCEPTED" FontSize="9" FontWeight="Bold" Foreground="#ff2d55"/>
+                                        <TextBlock x:Name="TxtTotalBlocked" Text="0" FontSize="34" FontWeight="Black" Foreground="#e8f0ff" Margin="0,6,0,0">
+                                            <TextBlock.Effect><DropShadowEffect BlurRadius="12" ShadowDepth="0" Color="#ff2d55" Opacity="0.7"/></TextBlock.Effect>
+                                        </TextBlock>
+                                        <TextBlock Text="total blocked attempts" FontSize="10" Foreground="#7b8db8" Margin="0,2,0,0"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Browser attacks -->
+                                <Border Grid.Row="0" Grid.Column="1" Margin="10,0,0,10" Background="{StaticResource PanelGrad}"
+                                        CornerRadius="14" BorderBrush="#00d2ff" BorderThickness="1" Padding="18,14">
+                                    <Border.Effect><DropShadowEffect BlurRadius="10" ShadowDepth="0" Color="#00d2ff" Opacity="0.25"/></Border.Effect>
+                                    <StackPanel>
+                                        <TextBlock Text="BROWSER ATTACKS" FontSize="9" FontWeight="Bold" Foreground="#00d2ff"/>
+                                        <TextBlock x:Name="TxtBrowserBlocked" Text="0" FontSize="34" FontWeight="Black" Foreground="#e8f0ff" Margin="0,6,0,0">
+                                            <TextBlock.Effect><DropShadowEffect BlurRadius="12" ShadowDepth="0" Color="#00d2ff" Opacity="0.7"/></TextBlock.Effect>
+                                        </TextBlock>
+                                        <TextBlock Text="password / cookie / card targets" FontSize="10" Foreground="#7b8db8" Margin="0,2,0,0"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Tokens -->
+                                <Border Grid.Row="1" Grid.Column="0" Margin="0,0,10,10" Background="{StaticResource PanelGrad}"
+                                        CornerRadius="14" BorderBrush="#f0a523" BorderThickness="1" Padding="18,14">
+                                    <Border.Effect><DropShadowEffect BlurRadius="10" ShadowDepth="0" Color="#f0a523" Opacity="0.25"/></Border.Effect>
+                                    <StackPanel>
+                                        <TextBlock Text="TOKEN STEALS" FontSize="9" FontWeight="Bold" Foreground="#f0a523"/>
+                                        <TextBlock x:Name="TxtTokensBlocked" Text="0" FontSize="34" FontWeight="Black" Foreground="#e8f0ff" Margin="0,6,0,0">
+                                            <TextBlock.Effect><DropShadowEffect BlurRadius="12" ShadowDepth="0" Color="#f0a523" Opacity="0.7"/></TextBlock.Effect>
+                                        </TextBlock>
+                                        <TextBlock Text="discord / browser tokens" FontSize="10" Foreground="#7b8db8" Margin="0,2,0,0"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Clipboard -->
+                                <Border Grid.Row="1" Grid.Column="1" Margin="10,0,0,10" Background="{StaticResource PanelGrad}"
+                                        CornerRadius="14" BorderBrush="#00ff88" BorderThickness="1" Padding="18,14">
+                                    <Border.Effect><DropShadowEffect BlurRadius="10" ShadowDepth="0" Color="#00ff88" Opacity="0.25"/></Border.Effect>
+                                    <StackPanel>
+                                        <TextBlock Text="CLIPBOARD THREATS" FontSize="9" FontWeight="Bold" Foreground="#00ff88"/>
+                                        <TextBlock x:Name="TxtClipboardBlocked" Text="0" FontSize="34" FontWeight="Black" Foreground="#e8f0ff" Margin="0,6,0,0">
+                                            <TextBlock.Effect><DropShadowEffect BlurRadius="12" ShadowDepth="0" Color="#00ff88" Opacity="0.7"/></TextBlock.Effect>
+                                        </TextBlock>
+                                        <TextBlock Text="tokens / keys / secrets" FontSize="10" Foreground="#7b8db8" Margin="0,2,0,0"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Protection layer status -->
+                                <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,0,0" Background="{StaticResource PanelGrad}"
+                                        CornerRadius="14" BorderBrush="#16233f" BorderThickness="1" Padding="18,16">
+                                    <Grid>
+                                        <TextBlock Text="PROTECTION LAYERS" FontSize="10" FontWeight="Bold" Foreground="#7b8db8" VerticalAlignment="Center"/>
+                                        <UniformGrid Columns="5" HorizontalAlignment="Right">
+                                            <StackPanel Margin="12,0,0,0" HorizontalAlignment="Center">
+                                                <Ellipse x:Name="LayerProc" Width="12" Height="12" Fill="#55668f" HorizontalAlignment="Center"/>
+                                                <TextBlock Text="PROCESS" FontSize="8" Foreground="#55668f" Margin="0,4,0,0" HorizontalAlignment="Center"/>
+                                            </StackPanel>
+                                            <StackPanel Margin="12,0,0,0" HorizontalAlignment="Center">
+                                                <Ellipse x:Name="LayerBrowser" Width="12" Height="12" Fill="#55668f" HorizontalAlignment="Center"/>
+                                                <TextBlock Text="BROWSER" FontSize="8" Foreground="#55668f" Margin="0,4,0,0" HorizontalAlignment="Center"/>
+                                            </StackPanel>
+                                            <StackPanel Margin="12,0,0,0" HorizontalAlignment="Center">
+                                                <Ellipse x:Name="LayerDiscord" Width="12" Height="12" Fill="#55668f" HorizontalAlignment="Center"/>
+                                                <TextBlock Text="DISCORD" FontSize="8" Foreground="#55668f" Margin="0,4,0,0" HorizontalAlignment="Center"/>
+                                            </StackPanel>
+                                            <StackPanel Margin="12,0,0,0" HorizontalAlignment="Center">
+                                                <Ellipse x:Name="LayerBehavior" Width="12" Height="12" Fill="#55668f" HorizontalAlignment="Center"/>
+                                                <TextBlock Text="BEHAVIOR" FontSize="8" Foreground="#55668f" Margin="0,4,0,0" HorizontalAlignment="Center"/>
+                                            </StackPanel>
+                                            <StackPanel Margin="12,0,0,0" HorizontalAlignment="Center">
+                                                <Ellipse x:Name="LayerClipboard" Width="12" Height="12" Fill="#55668f" HorizontalAlignment="Center"/>
+                                                <TextBlock Text="CLIPBOARD" FontSize="8" Foreground="#55668f" Margin="0,4,0,0" HorizontalAlignment="Center"/>
+                                            </StackPanel>
+                                        </UniformGrid>
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                        </Grid>
+
+                        <!-- Recent threat strip -->
+                        <Border Grid.Row="1" Background="{StaticResource PanelGrad}" CornerRadius="14"
+                                BorderBrush="#16233f" BorderThickness="1" Padding="16,12" Margin="0,10,0,0">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="LATEST ACTIVITY" FontSize="10" FontWeight="Bold" Foreground="#7b8db8"/>
+                                    <TextBlock x:Name="TxtRecentThreat" Text="  â€” no threats recorded" FontSize="10" Foreground="#55668f" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </TabItem>
+
+                <!-- ======= DISCORD SHIELD ======= -->
+                <TabItem>
+                    <Grid Margin="22,4,22,20">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <UniformGrid Grid.Row="0" Columns="4" Margin="0,0,0,14">
+                            <Border Background="{StaticResource PanelGrad}" CornerRadius="14" BorderBrush="#f0a523" BorderThickness="1" Margin="0,0,7,0" Padding="16,12">
+                                <StackPanel>
+                                    <TextBlock Text="TOKEN FILE INTERCEPTS" FontSize="9" FontWeight="Bold" Foreground="#f0a523"/>
+                                    <TextBlock x:Name="TxtDiscordTokens" Text="0" FontSize="26" FontWeight="Black" Foreground="#e8f0ff" Margin="0,6,0,0">
+                                        <TextBlock.Effect><DropShadowEffect BlurRadius="10" ShadowDepth="0" Color="#f0a523" Opacity="0.6"/></TextBlock.Effect>
+                                    </TextBlock>
+                                </StackPanel>
+                            </Border>
+                            <Border Background="{StaticResource PanelGrad}" CornerRadius="14" BorderBrush="#ff2d55" BorderThickness="1" Margin="7,0,7,0" Padding="16,12">
+                                <StackPanel>
+                                    <TextBlock Text="WEBHOOK EXFIL BLOCKS" FontSize="9" FontWeight="Bold" Foreground="#ff2d55"/>
+                                    <TextBlock x:Name="TxtWebhookBlocks" Text="0" FontSize="26" FontWeight="Black" Foreground="#e8f0ff" Margin="0,6,0,0">
+                                        <TextBlock.Effect><DropShadowEffect BlurRadius="10" ShadowDepth="0" Color="#ff2d55" Opacity="0.6"/></TextBlock.Effect>
+                                    </TextBlock>
+                                </StackPanel>
+                            </Border>
+                            <Border Background="{StaticResource PanelGrad}" CornerRadius="14" BorderBrush="#a855f7" BorderThickness="1" Margin="7,0,7,0" Padding="16,12">
+                                <StackPanel>
+                                    <TextBlock Text="INJECTION BLOCKS" FontSize="9" FontWeight="Bold" Foreground="#a855f7"/>
+                                    <TextBlock x:Name="TxtInjectionBlocks" Text="0" FontSize="26" FontWeight="Black" Foreground="#e8f0ff" Margin="0,6,0,0">
+                                        <TextBlock.Effect><DropShadowEffect BlurRadius="10" ShadowDepth="0" Color="#a855f7" Opacity="0.6"/></TextBlock.Effect>
+                                    </TextBlock>
+                                </StackPanel>
+                            </Border>
+                            <Border Background="{StaticResource PanelGrad}" CornerRadius="14" BorderBrush="#00ff88" BorderThickness="1" Margin="7,0,0,0" Padding="16,12">
+                                <StackPanel>
+                                    <TextBlock Text="CRYPTO DECRYPT BLOCKS" FontSize="9" FontWeight="Bold" Foreground="#00ff88"/>
+                                    <TextBlock x:Name="TxtCryptoBlocks" Text="0" FontSize="26" FontWeight="Black" Foreground="#e8f0ff" Margin="0,6,0,0">
+                                        <TextBlock.Effect><DropShadowEffect BlurRadius="10" ShadowDepth="0" Color="#00ff88" Opacity="0.6"/></TextBlock.Effect>
+                                    </TextBlock>
+                                </StackPanel>
+                            </Border>
+                        </UniformGrid>
+
+                        <Border Grid.Row="1" Background="#0a1024" CornerRadius="12" BorderBrush="#16233f" BorderThickness="1">
+                            <Grid>
+                                <TextBlock x:Name="TxtDiscordPlaceholder"
+                                           Text="All Discord token stores are monitored. Detection events appear here."
+                                           HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#55668f"
+                                           FontSize="12" FontStyle="Italic"/>
+                                <DataGrid x:Name="DiscordGrid" Margin="0" AutoGenerateColumns="False" IsReadOnly="True"
+                                          Background="Transparent" Foreground="#e8f0ff"
+                                          BorderThickness="0" GridLinesVisibility="None"
+                                          CanUserAddRows="False" RowBackground="#0a1024"
+                                          AlternatingRowBackground="#0d1425" Visibility="Collapsed">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="TIME" Binding="{Binding Timestamp, StringFormat=HH:mm:ss}" Width="80"/>
+                                        <DataGridTextColumn Header="TYPE" Binding="{Binding Type}" Width="150"/>
+                                        <DataGridTextColumn Header="PROCESS" Binding="{Binding ProcessName}" Width="130"/>
+                                        <DataGridTextColumn Header="TARGET" Binding="{Binding TargetPath}" Width="*"/>
+                                        <DataGridTextColumn Header="ACTION" Binding="{Binding Action}" Width="110"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </TabItem>
+
+                <!-- ======= THREAT LOG ======= -->
+                <TabItem>
+                    <Grid Margin="22,4,22,20">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+                            <TextBlock x:Name="TxtThreatCount" Text="0 events" FontSize="11" Foreground="#7b8db8" VerticalAlignment="Center"/>
+                            <Button Content="CLEAR LOG" Style="{StaticResource TinyActionBtn}" Margin="14,0,0,0" Click="ClearLog_Click"/>
+                            <Button Content="AUTO-SCROLL OFF" x:Name="BtnAutoScroll" Style="{StaticResource TinyActionBtn}" Margin="8,0,0,0" Click="ToggleAutoScroll_Click"/>
+                        </StackPanel>
+                        <Border Grid.Row="1" Background="#0a1024" CornerRadius="12" BorderBrush="#16233f" BorderThickness="1">
+                            <DataGrid x:Name="ThreatGrid" Margin="10" AutoGenerateColumns="False" IsReadOnly="True"
+                                      Background="Transparent" Foreground="#e8f0ff"
+                                      BorderThickness="0" GridLinesVisibility="None"
+                                      HeadersVisibility="Column" CanUserAddRows="False"
+                                      RowBackground="#0a1024" AlternatingRowBackground="#0d1425"
+                                      ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="TIME" Binding="{Binding Timestamp, StringFormat=HH:mm:ss}" Width="75"/>
+                                    <DataGridTextColumn Header="SEVERITY" Binding="{Binding Severity}" Width="80"/>
+                                    <DataGridTextColumn Header="TYPE" Binding="{Binding Type}" Width="150"/>
+                                    <DataGridTextColumn Header="PROCESS" Binding="{Binding ProcessName}" Width="130"/>
+                                    <DataGridTextColumn Header="PID" Binding="{Binding ProcessId}" Width="55"/>
+                                    <DataGridTextColumn Header="TARGET" Binding="{Binding TargetPath}" Width="*"/>
+                                    <DataGridTextColumn Header="ACTION" Binding="{Binding Action}" Width="120"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </Grid>
+                </TabItem>
+
+                <!-- ======= BROWSERS ======= -->
+                <TabItem>
+                    <Grid Margin="22,4,22,20">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Text="Protected browser data targets" FontSize="11" Foreground="#7b8db8" Margin="0,0,0,10"/>
+                        <Border Grid.Row="1" Background="#0a1024" CornerRadius="12" BorderBrush="#16233f" BorderThickness="1">
+                            <DataGrid x:Name="BrowserGrid" Margin="10" AutoGenerateColumns="False" IsReadOnly="True"
+                                      Background="Transparent" Foreground="#e8f0ff"
+                                      BorderThickness="0" GridLinesVisibility="None" CanUserAddRows="False"
+                                      RowBackground="#0a1024" AlternatingRowBackground="#0d1425">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="BROWSER" Binding="{Binding Name}" Width="130"/>
+                                    <DataGridTextColumn Header="PROCESS" Binding="{Binding ProcessName}" Width="130"/>
+                                    <DataGridTextColumn Header="PATH" Binding="{Binding UserDataPath}" Width="*"/>
+                                    <DataGridCheckBoxColumn Header="RUNNING" Binding="{Binding IsRunning}" Width="80"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </Grid>
+                </TabItem>
+
+                <!-- ======= MODULES ======= -->
+                <TabItem>
+                    <Grid Margin="22,4,22,20">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Text="Active protection modules" FontSize="14" FontWeight="Bold" Foreground="#00d2ff"
+                                       Margin="0,0,0,14" Effect="{StaticResource GlowCyanSoft}"/>
+                            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                                <StackPanel>
+                                    <!-- Module rows -->
+                                    <Border Background="{StaticResource PanelGrad}" CornerRadius="12" BorderBrush="#16233f" BorderThickness="1" Padding="16,12" Margin="0,0,0,8">
+                                        <Grid>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Ellipse Width="10" Height="10" Fill="#00d2ff" Margin="0,2,12,0" Effect="{StaticResource GlowCyanSoft}"/>
+                                                <StackPanel>
+                                                    <TextBlock Text="Real-Time Process Guard" FontWeight="SemiBold" Foreground="#e8f0ff"/>
+                                                    <TextBlock Text="WMI instant process-creation kill + trust scoring + parent-chain analysis" FontSize="10" Foreground="#7b8db8"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                            <TextBlock Text="ACTIVE" FontSize="9" FontWeight="Bold" Foreground="#00ff88" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                        </Grid>
+                                    </Border>
+                                    <Border Background="{StaticResource PanelGrad}" CornerRadius="12" BorderBrush="#16233f" BorderThickness="1" Padding="16,12" Margin="0,0,0,8">
+                                        <Grid>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Ellipse Width="10" Height="10" Fill="#f0a523" Margin="0,2,12,0" Effect="{StaticResource GlowGold}"/>
+                                                <StackPanel>
+                                                    <TextBlock Text="Discord Token Shield" FontWeight="SemiBold" Foreground="#e8f0ff"/>
+                                                    <TextBlock Text="leveldb / Local Storage / Session Storage + dQw4w9WgXcQ pattern scan" FontSize="10" Foreground="#7b8db8"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                            <TextBlock Text="ACTIVE" FontSize="9" FontWeight="Bold" Foreground="#00ff88" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                        </Grid>
+                                    </Border>
+                                    <Border Background="{StaticResource PanelGrad}" CornerRadius="12" BorderBrush="#16233f" BorderThickness="1" Padding="16,12" Margin="0,0,0,8">
+                                        <Grid>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Ellipse Width="10" Height="10" Fill="#a855f7" Margin="0,2,12,0" Effect="{StaticResource GlowPurple}"/>
+                                                <StackPanel>
+                                                    <TextBlock Text="Behavior Correlation Engine" FontWeight="SemiBold" Foreground="#e8f0ff"/>
+                                                    <TextBlock Text="multi-target crawl detection across protected stores in a 45s window" FontSize="10" Foreground="#7b8db8"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                            <TextBlock Text="ACTIVE" FontSize="9" FontWeight="Bold" Foreground="#00ff88" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                        </Grid>
+                                    </Border>
+                                    <Border Background="{StaticResource PanelGrad}" CornerRadius="12" BorderBrush="#16233f" BorderThickness="1" Padding="16,12" Margin="0,0,0,8">
+                                        <Grid>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Ellipse Width="10" Height="10" Fill="#ff2d55" Margin="0,2,12,0" Effect="{StaticResource GlowRedMid}"/>
+                                                <StackPanel>
+                                                    <TextBlock Text="Browser Data Protection" FontWeight="SemiBold" Foreground="#e8f0ff"/>
+                                                    <TextBlock Text="Login Data, Cookies, Web Data, + Firefox key4.db / logins.json / sqlite stores" FontSize="10" Foreground="#7b8db8"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                            <TextBlock Text="ACTIVE" FontSize="9" FontWeight="Bold" Foreground="#00ff88" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                        </Grid>
+                                    </Border>
+                                    <Border Background="{StaticResource PanelGrad}" CornerRadius="12" BorderBrush="#16233f" BorderThickness="1" Padding="16,12" Margin="0,0,0,8">
+                                        <Grid>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Ellipse Width="10" Height="10" Fill="#00ff88" Margin="0,2,12,0" Effect="{StaticResource GlowGreen}"/>
+                                                <StackPanel>
+                                                    <TextBlock Text="Memory / Module Scanner" FontWeight="SemiBold" Foreground="#e8f0ff"/>
+                                                    <TextBlock Text="low-trust processes loading sqlite + crypt DLLs are killed on sight" FontSize="10" Foreground="#7b8db8"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                            <TextBlock Text="ACTIVE" FontSize="9" FontWeight="Bold" Foreground="#00ff88" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                        </Grid>
+                                    </Border>
+                                    <Border Background="{StaticResource PanelGrad}" CornerRadius="12" BorderBrush="#16233f" BorderThickness="1" Padding="16,12" Margin="0,0,0,8">
+                                        <Grid>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Ellipse Width="10" Height="10" Fill="#e94560" Margin="0,2,12,0" Effect="{StaticResource GlowRedMid}"/>
+                                                <StackPanel>
+                                                    <TextBlock Text="Stolen-Data Copy Watcher" FontWeight="SemiBold" Foreground="#e8f0ff"/>
+                                                    <TextBlock Text="detects browser/leveldb dumps landing in %TEMP% / Downloads" FontSize="10" Foreground="#7b8db8"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                            <TextBlock Text="ACTIVE" FontSize="9" FontWeight="Bold" Foreground="#00ff88" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                        </Grid>
+                                    </Border>
+                                    <Border Background="{StaticResource PanelGrad}" CornerRadius="12" BorderBrush="#16233f" BorderThickness="1" Padding="16,12" Margin="0,0,0,8">
+                                        <Grid>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Ellipse Width="10" Height="10" Fill="#f472b6" Margin="0,2,12,0"/>
+                                                <StackPanel>
+                                                    <TextBlock Text="Clipboard + Screen + Camera" FontWeight="SemiBold" Foreground="#e8f0ff"/>
+                                                    <TextBlock Text="token/webhook/API-key clipboard patterns, capture attempts, camera abuse" FontSize="10" Foreground="#7b8db8"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                            <TextBlock Text="ACTIVE" FontSize="9" FontWeight="Bold" Foreground="#00ff88" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                        </Grid>
+                                    </Border>
+                                </StackPanel>
+                            </ScrollViewer>
+                        </Grid>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </Grid>
+
+        <!-- ================= STATUS BAR ================= -->
+        <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Background="#050910" BorderBrush="#16233f" BorderThickness="0,1,0,0">
+            <Grid Margin="14,0">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock x:Name="TxtEngineStatus" Text="engine: idle" FontSize="10" Foreground="#55668f"/>
+                    <TextBlock Text="  |  " FontSize="10" Foreground="#16233f"/>
+                    <TextBlock Text="designed by hellstorm" FontSize="10" Foreground="#55668f" FontStyle="Italic"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <TextBlock x:Name="TxtThreatCountBar" Text="0 threats" FontSize="10" Foreground="#55668f"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+
+    <!-- ================= ANIMATIONS ================= -->
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="Window.Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <!-- radar rings -->
+                    <DoubleAnimation Storyboard.TargetName="Ring1" Storyboard.TargetProperty="(Ellipse.Opacity)"
+                                     From="0.6" To="0.15" Duration="0:0:2" AutoReverse="True" RepeatBehavior="Forever"/>
+                    <DoubleAnimation Storyboard.TargetName="Ring2" Storyboard.TargetProperty="(Ellipse.Opacity)"
+                                     From="0.4" To="0.1" Duration="0:0:2" AutoReverse="True" BeginTime="0:0:0.5" RepeatBehavior="Forever"/>
+                    <DoubleAnimation Storyboard.TargetName="Ring3" Storyboard.TargetProperty="(Ellipse.Opacity)"
+                                     From="0.2" To="0.05" Duration="0:0:2" AutoReverse="True" BeginTime="0:0:1" RepeatBehavior="Forever"/>
+                    <!-- ambient blob drift -->
+                    <DoubleAnimation Storyboard.TargetName="BgBlob1Y" Storyboard.TargetProperty="Y"
+                                     From="0" To="120" Duration="0:0:12" AutoReverse="True" RepeatBehavior="Forever"/>
+                    <!-- status dot pulse -->
+                    <DoubleAnimation Storyboard.TargetName="StatusDot" Storyboard.TargetProperty="Opacity"
+                                     From="1" To="0.45" Duration="0:0:1.2" AutoReverse="True" RepeatBehavior="Forever"/>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </Window.Triggers>
+</Window>
