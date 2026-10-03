@@ -110,7 +110,7 @@ self-defense.
 
 ## Credits
 
-Designed, engineered and polished by **Team HellStorm**.
+Designed, engineered and polished by **GOLEM**.
 
 ## License
 
