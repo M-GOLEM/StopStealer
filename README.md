@@ -2,10 +2,10 @@
 
 # HellStorm — StopStealer
 
-**Real-time token-grabber & infostealer blocker for Windows, built by Team HellStorm.**
+**Real-time token-grabber & infostealer blocker for Windows.**
 
-Sits in the tray, watches your browser and Discord profiles, scans running processes
-down to raw memory, and kills grabbers *before* they can phone home with your tokens.
+Watches browser and Discord profiles, scans running processes down to raw
+memory, and stops grabbers before they can phone home with your tokens.
 
 ![HellStorm dashboard](screenshot.png)
 
@@ -15,18 +15,19 @@ down to raw memory, and kills grabbers *before* they can phone home with your to
 
 ## Why
 
-Discord and browser token grabbers are usually tiny scripts or one-shot executables
-that only *read* files — they never write, so classic file-watchers miss them.
-HellStorm blocks them anyway, using three independent layers:
+Discord and browser token grabbers are usually tiny scripts or one-shot
+executables that only *read* files — they never write, so classic file watchers
+miss them. StopStealer blocks them with independent layers:
 
 | Layer | What it catches |
 |-------|-----------------|
-| **Memory signature scan** | Token dump prefixes (`dQw4w9WgXcQ:`), webhook URLs, `CryptUnprotectData`/`os_crypt` calls, `users/@me` probes — found live in process memory, in plain text **or** UTF-16. |
-| **Behavioral + WMI guard** | New suspicious processes, script interpreters running from temp/downloads, HWID harvesting (`wmic csproduct get uuid`), DPAPI usage by low-trust processes. |
-| **Browser/Discord profile monitor** | File-system events on LevelDB / Local State / Cookies, with the accessor attributed and verified before any action. |
+| **Memory signature scan** | Token dump prefixes, webhook URLs, `CryptUnprotectData` / `os_crypt` calls, `users/@me` probes — in plain text **or** UTF-16, live in process memory. |
+| **Behavioral + WMI guard** | New suspicious processes, script interpreters running from temp/downloads, HWID harvesting (`wmic csproduct get uuid`), DPAPI use by low-trust processes. |
+| **Browser / Discord profile monitor** | File-system events on LevelDB, Local State and cookie stores, with the accessor attributed before any action. |
+| **Camera / screen / clipboard guards** | Detects capture attempts by untrusted processes. |
 
-> Every block is live: kill + quarantine of the offending process, plus a
-> persistent log you can read in the app's Threat Log tab.
+Every block is live: process kill + quarantine, plus an entry in the app's
+Threat Log tab. All logs stay on the machine.
 
 ## Screenshots
 
@@ -36,81 +37,93 @@ HellStorm blocks them anyway, using three independent layers:
 
 ## Features
 
-- Signature check on every launch — the launcher verifies the exe is signed by
-  the HellStorm certificate and aborts if the binary has been touched.
-- Start / Stop protection anytime, from the dashboard.
-- **Auto-run with Windows** — one click registers the launcher in
-  `HKCU\...\Run` (optionally through the signed **hellstorm.bat** so the
-  signature test still runs at boot).
+- Start / stop protection from the dashboard.
 - Live counters: threats blocked, token grabbers, webhooks, crypto decrypt
   attempts, token steals prevented.
-- Dark glass WPF dashboard — CPU/GPU/RAM gauges, recent-threat feed, per-layer
-  status toggle.
-
-## How to run
-
-Double-click **hellstorm.bat** (in the repo root, next to `bin\`). It runs the
-certificate + integrity test, then launches the app under a fresh random process
-name (each launch gets a new one) from a private folder under `%TEMP%`. You can
-pass arguments through:
-
-```bat
-hellstorm.bat                 :: normal launch
-hellstorm.bat --autostart     :: engage protection and start minimized
-```
-
-### Register auto-start (optional, still via the bat)
-
-```bat
-reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v hellstorm /t REG_SZ ^
- /d "cmd /c \"\"C:\HellStorm\hellstorm.bat\" --autostart\"" /f
-```
+- Windows service for protection that survives logoff, plus a tray/WPF
+  dashboard.
+- Auto-start shortcut installed into the current user's Startup folder.
+- Dark WPF UI with CPU/RAM gauges, recent-threat feed and per-layer status.
 
 ## Requirements
 
 - Windows 10/11, 64-bit
-- .NET 8 Desktop Runtime
-- An administrator account is **not** required (user-level protection)
-
-## Source layout
-
-The full source lives in its own folder:
-
-```
-Source/
-  StopStealer.sln           # Core + Service + GUI
-  StopStealer.Core/         # engine: memory scanner, process guard,
-                            #   browser/discord protector, behavior engine, logging
-  StopStealer.Service/      # optional Windows background worker
-  StopStealer.GUI/          # WPF dashboard (Focus of this project)
-```
+- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) to build
+  (.NET 8 Desktop Runtime to run a published build)
+- Administrator rights **only for the service install**; the GUI itself runs
+  as a normal user
 
 ## Build from source
 
-```bash
-dotnet build Source\StopStealer.sln -c Release
+```powershell
+dotnet restore StopStealer.sln
+dotnet build   StopStealer.sln -c Release
 ```
 
-> The signed runtime payload is shipped in `bin\`. If you rebuild, re-sign the
-> exe with your own `hellstorm.cer` (or the private key of this certificate),
-> otherwise the launcher will refuse to run it.
+Outputs:
 
-## Software integrity
+```text
+StopStealer.Core\bin\Release\net8.0-windows\
+StopStealer.GUI\bin\Release\net8.0-windows\StopStealer.GUI.exe
+StopStealer.Service\bin\Release\net8.0-windows\StopStealer.Service.exe
+```
 
-`hellstorm.cer` contains the HellStorm code-signing certificate. `check-signature.ps1`
-compares the exe's signature thumbprint against it on every launch. If the digest
-differs, the app refuses to run — a clean way to prove you have the untouched release.
+> The repository also contains previously built `bin\` / `obj\` outputs. They
+> are build artifacts, not signed releases; rebuild locally if you want to be
+> sure what you are running.
+
+## Install as a service
+
+`StopStealer.Installer\Install.ps1` builds (optional), copies the binaries to
+`%LOCALAPPDATA%\StopStealer`, registers the Windows service
+`StopStealerProtection`, starts it, and adds a Startup shortcut for the GUI.
+
+```powershell
+# Run in an elevated PowerShell from the repository root
+powershell -ExecutionPolicy Bypass -File .\StopStealer.Installer\Install.ps1 -Build
+
+# Later, without rebuilding
+powershell -ExecutionPolicy Bypass -File .\StopStealer.Installer\Install.ps1
+```
+
+Uninstall:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\StopStealer.Installer\Install.ps1 -Uninstall
+```
+
+Notes:
+
+- The installer must run elevated because it creates a Windows service.
+- The install directory is under the **elevated account's** `%LOCALAPPDATA%`.
+  On a shared machine, install from the account that will run the service.
+- No code-signing certificate is shipped in this repository, and there is no
+  signature-check launcher. Build, scan and sign the binaries yourself if you
+  distribute them.
+
+## Source layout
+
+```text
+StopStealer.sln
+StopStealer.Core/        engine: memory scanner, process guard, browser and
+                         Discord protector, behavior engine, logging
+StopStealer.GUI/         WPF dashboard (this is the main UI)
+StopStealer.Service/     Windows service host for the protection engine
+StopStealer.Installer/   Install.ps1 (build / install / uninstall)
+screenshot.png           dashboard screenshots
+```
 
 ## Scope & safety
 
-HellStorm is a **defensive** tool. Use it to protect machines you own or are
-authorized to protect. It does not install drivers, does not phone home, and it
-keeps all logs local. It is distributed as-is, for security research and
-self-defense.
+StopStealer is a **defensive** tool. Use it on machines you own or are
+authorized to protect. It installs no kernel driver, phones home to no server,
+and keeps logs local. It is not an antivirus replacement: a determined stealer
+can evade user-mode hooks, so keep Windows Defender and OS updates enabled as
+well. Distributed as-is, for security research and self-defense.
 
 ## Credits
 
-Designed, engineered and polished by **GOLEM**.
+Designed, engineered and polished by **GOLEM** / Team HellStorm.
 
 ## License
 
