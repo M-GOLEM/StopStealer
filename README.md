@@ -128,10 +128,3 @@ Designed, engineered and polished by **GOLEM** / Team HellStorm.
 ## License
 
 MIT — see [LICENSE](LICENSE).
-
----
-
-<div align="center">
-  <sub>Built by <a href="https://github.com/M-GOLEM"><b>Mr.GOLEM</b></a> ·
-  watch the work on <a href="https://www.youtube.com/@golemsec">YouTube — GOLEM SEC</a></sub>
-</div>
